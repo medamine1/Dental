@@ -3,6 +3,8 @@ package ma.dentalTech.mvc.ui;
 import javax.swing.*;
 import java.awt.*;
 import ma.dentalTech.mvc.controllers.modules.patient.api.PatientController;
+import ma.dentalTech.mvc.controllers.modules.medecin.api.MedecinController;
+import ma.dentalTech.mvc.controllers.modules.consultation.api.ConsultationController;
 import ma.dentalTech.conf.ApplicationContext;
 
 public class DashboardView extends JFrame {
@@ -32,7 +34,17 @@ public class DashboardView extends JFrame {
             PatientController pc = ApplicationContext.getBean(PatientController.class);
             pc.showRecentPatients();
         });
-        // TODO: Add medecinsBtn and consultationsBtn actions
+        
+        medecinsBtn.addActionListener(e -> {
+            MedecinController mc = ApplicationContext.getBean(MedecinController.class);
+            mc.showAllMedecins();
+        });
+        
+        consultationsBtn.addActionListener(e -> {
+            ConsultationController cc = ApplicationContext.getBean(ConsultationController.class);
+            cc.showTodayConsultations();
+        });
+        
         quitBtn.addActionListener(e -> System.exit(0));
     }
 

@@ -4,8 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import ma.dentalTech.mvc.controllers.modules.patient.api.PatientController;
+import ma.dentalTech.mvc.controllers.modules.medecin.api.MedecinController;
+import ma.dentalTech.mvc.controllers.modules.consultation.api.ConsultationController;
 import ma.dentalTech.repository.modules.patient.api.PatientRepository;
 import ma.dentalTech.service.modules.patient.api.PatientService;
+import ma.dentalTech.service.modules.medecin.api.MedecinService;
+import ma.dentalTech.service.modules.consultation.api.ConsultationService;
 
 public class ApplicationContext {
 
@@ -22,7 +26,12 @@ public class ApplicationContext {
                 String daoClassName = properties.getProperty("patientRepo");
                 String servClassName = properties.getProperty("patientService");
                 String ctrlClassName = properties.getProperty("patientController");
+                String medecinServiceClassName = properties.getProperty("medecinService");
+                String medecinCtrlClassName = properties.getProperty("medecinController");
+                String consultationServiceClassName = properties.getProperty("consultationService");
+                String consultationCtrlClassName = properties.getProperty("consultationController");
 
+                // Patient module
                 Class<?> cRepository = Class.forName(daoClassName);
                 PatientRepository repository = (PatientRepository) cRepository.getDeclaredConstructor().newInstance();
 
@@ -32,15 +41,37 @@ public class ApplicationContext {
                 Class<?> cController = Class.forName(ctrlClassName);
                 PatientController controller = (PatientController) cController.getDeclaredConstructor(PatientService.class).newInstance(service);
 
+                // Medecin module
+                Class<?> cMedecinService = Class.forName(medecinServiceClassName);
+                MedecinService medecinService = (MedecinService) cMedecinService.getDeclaredConstructor().newInstance();
+
+                Class<?> cMedecinController = Class.forName(medecinCtrlClassName);
+                MedecinController medecinController = (MedecinController) cMedecinController.getDeclaredConstructor(MedecinService.class).newInstance(medecinService);
+
+                // Consultation module
+                Class<?> cConsultationService = Class.forName(consultationServiceClassName);
+                ConsultationService consultationService = (ConsultationService) cConsultationService.getDeclaredConstructor().newInstance();
+
+                Class<?> cConsultationController = Class.forName(consultationCtrlClassName);
+                ConsultationController consultationController = (ConsultationController) cConsultationController.getDeclaredConstructor(ConsultationService.class).newInstance(consultationService);
+
                 // Stockage des beans dans le contexte
                 context.put(PatientRepository.class, repository);
                 context.put(PatientService.class, service);
                 context.put(PatientController.class, controller);
+                context.put(MedecinService.class, medecinService);
+                context.put(MedecinController.class, medecinController);
+                context.put(ConsultationService.class, consultationService);
+                context.put(ConsultationController.class, consultationController);
 
                 // Enregistrement des beans aussi avec des noms explicites
                 contextByName.put("patientDao", repository);
                 contextByName.put("patientService", service);
                 contextByName.put("patientController", controller);
+                contextByName.put("medecinService", medecinService);
+                contextByName.put("medecinController", medecinController);
+                contextByName.put("consultationService", consultationService);
+                contextByName.put("consultationController", consultationController);
 
             } catch (Exception e) {
                 e.printStackTrace();

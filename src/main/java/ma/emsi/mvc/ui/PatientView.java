@@ -47,7 +47,7 @@ public class PatientView extends JFrame {
         model.setRowCount(0);
         for (Patient p : patients) {
             model.addRow(new Object[]{
-                p.getId(), p.getNom(), p.getPrenom(), p.getDateNaissance(), p.getSexe(), p.getTel()
+                p.getId(), p.getNom(), p.getPrenom(), "N/A", p.getSexe(), "N/A"
             });
         }
     }
