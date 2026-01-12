@@ -23,5 +23,12 @@ public class Patient {
     private Sexe sexe;
     private Assurance assurance;
 
+    public LocalDate getDateNaissance() {
+        return dateNaissance;
+    }
+    public String getTel() {
+        return telephone;
+    }
+
 
 }

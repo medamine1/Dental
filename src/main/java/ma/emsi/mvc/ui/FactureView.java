@@ -1,34 +1,32 @@
 package ma.emsi.mvc.ui;
 
-import ma.emsi.entities.Patient;
+import ma.emsi.entities.Facture;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
 
-public class PatientView extends JFrame {
+public class FactureView extends JFrame {
     private JTable table;
     private DefaultTableModel model;
     private JButton addBtn, editBtn, deleteBtn, refreshBtn;
 
-    public PatientView(List<Patient> patients) {
-        setTitle("Gestion des Patients");
-        setSize(700, 400);
+    public FactureView(List<Facture> factures) {
+        setTitle("Gestion des Factures");
+        setSize(800, 400);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
 
-        // Table
-        String[] columns = {"ID", "Nom", "Prénom", "Date Naissance", "Sexe", "Téléphone"};
+        String[] columns = {"ID", "Patient", "Date", "Montant", "Statut"};
         model = new DefaultTableModel(columns, 0) {
             @Override public boolean isCellEditable(int row, int col) { return false; }
         };
         table = new JTable(model);
-        refreshPatients(patients);
+        refreshFactures(factures);
         JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane, BorderLayout.CENTER);
 
-        // Buttons
         JPanel btnPanel = new JPanel();
         addBtn = new JButton("Ajouter");
         editBtn = new JButton("Modifier");
@@ -39,20 +37,18 @@ public class PatientView extends JFrame {
         btnPanel.add(deleteBtn);
         btnPanel.add(refreshBtn);
         add(btnPanel, BorderLayout.SOUTH);
-
-        // TODO: Add action listeners for buttons to call controller methods
     }
 
-    public void refreshPatients(List<Patient> patients) {
+    public void refreshFactures(List<Facture> factures) {
         model.setRowCount(0);
-        for (Patient p : patients) {
+        for (Facture f : factures) {
             model.addRow(new Object[]{
-                p.getId(), p.getNom(), p.getPrenom(), p.getDateNaissance(), p.getSexe(), p.getTel()
+                f.getId(), f.getPatientName(), f.getDateFacture(), f.getMontant(), f.getStatut()
             });
         }
     }
 
-    public static void showUI(List<Patient> patients) {
-        SwingUtilities.invokeLater(() -> new PatientView(patients).setVisible(true));
+    public static void showUI(List<Facture> factures) {
+        SwingUtilities.invokeLater(() -> new FactureView(factures).setVisible(true));
     }
 }

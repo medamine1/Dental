@@ -1,34 +1,32 @@
 package ma.emsi.mvc.ui;
 
-import ma.emsi.entities.Patient;
+import ma.emsi.entities.Consultation;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
 
-public class PatientView extends JFrame {
+public class ConsultationView extends JFrame {
     private JTable table;
     private DefaultTableModel model;
     private JButton addBtn, editBtn, deleteBtn, refreshBtn;
 
-    public PatientView(List<Patient> patients) {
-        setTitle("Gestion des Patients");
-        setSize(700, 400);
+    public ConsultationView(List<Consultation> consultations) {
+        setTitle("Gestion des Consultations");
+        setSize(800, 400);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
 
-        // Table
-        String[] columns = {"ID", "Nom", "Prénom", "Date Naissance", "Sexe", "Téléphone"};
+        String[] columns = {"ID", "Patient", "Médecin", "Date", "Motif", "Notes"};
         model = new DefaultTableModel(columns, 0) {
             @Override public boolean isCellEditable(int row, int col) { return false; }
         };
         table = new JTable(model);
-        refreshPatients(patients);
+        refreshConsultations(consultations);
         JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane, BorderLayout.CENTER);
 
-        // Buttons
         JPanel btnPanel = new JPanel();
         addBtn = new JButton("Ajouter");
         editBtn = new JButton("Modifier");
@@ -39,20 +37,18 @@ public class PatientView extends JFrame {
         btnPanel.add(deleteBtn);
         btnPanel.add(refreshBtn);
         add(btnPanel, BorderLayout.SOUTH);
-
-        // TODO: Add action listeners for buttons to call controller methods
     }
 
-    public void refreshPatients(List<Patient> patients) {
+    public void refreshConsultations(List<Consultation> consultations) {
         model.setRowCount(0);
-        for (Patient p : patients) {
+        for (Consultation c : consultations) {
             model.addRow(new Object[]{
-                p.getId(), p.getNom(), p.getPrenom(), p.getDateNaissance(), p.getSexe(), p.getTel()
+                c.getId(), c.getPatientName(), c.getMedecinName(), c.getDateConsultation(), c.getMotif(), c.getNotes()
             });
         }
     }
 
-    public static void showUI(List<Patient> patients) {
-        SwingUtilities.invokeLater(() -> new PatientView(patients).setVisible(true));
+    public static void showUI(List<Consultation> consultations) {
+        SwingUtilities.invokeLater(() -> new ConsultationView(consultations).setVisible(true));
     }
 }
